@@ -1,0 +1,70 @@
+{% extends 'willy/base.html' %}
+
+
+{% block content %}
+    <style>
+        #div1 {
+            white-space: nowrap; 
+            width: 6.745em; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #div2 {
+            width: 40em;
+        }
+        #div3 {
+            white-space: nowrap; 
+            width: 15em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+
+    <div class="w3-third w3-margin w3-border" id="div2">
+        <h1> 
+            <div class="command" style="color:orange;font-weight:bold" id="div3" >{{ device.name }} 
+            </div>
+        {% if user.is_authenticated %}
+            <a class="close-command btn btn-default" href="{% url 'device_remove' pk=device.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="closer-command btn btn-default" href="{% url 'device_edit' pk=device.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <br>
+            <a class="close-command btn btn-default" href="{% url 'add_command_to_device' pk=device.pk %}">Add a new command</a>
+            {% if device.commands.all %}
+                <a class="closer-command btn btn-default" href="{% url 'schedule_command' pk=device.pk %}"> <span> Schedule commands </span> </a>
+                <!-- <a class="btn btn-default" href="{% url 'trigger_command' pk=device.pk %}"> <span> Trigger a command </span> </a> -->
+            {% endif %}
+        {% endif %}
+        </h1>
+        <br>
+        {% for command in device.commands.all %}
+            <a class="command btn btn-default" href="{% url 'trigger_one_command' device_pk=device.pk command_pk=command.pk %}" >
+                <div id="div1">{{ command.name }}</div>
+            </a>
+        {% empty %}
+            <p class="command">No commands yet.</p>
+        {% endfor %}
+       <!--  <a class="command" href="{% url 'add_command_to_device' pk=device.pk %}" > <span class="command glyphicon glyphicon-plus" ></span> </a> -->
+    </div>
+
+
+    <div class="w3-third w3-margin" id="div2">
+        <br>
+        <p> <span style="font-style:italic;color:orange;font-weight:bold">Scheduled events: </p>
+        {% for event in device.device_events.all %}
+            <div class="command">
+                <strong>{{ event.command.name }} @ </strong>
+                {% if event.everyday %}
+                    {{event.scheduled_time|date:'H:i'}} Daily
+                {% else %}
+                    {{event.scheduled_time|date:'Y-m-d H:i'}}
+                {% endif %}
+                {% if user.is_authenticated %}
+                    <a class="btn btn-default" href="{% url 'event_remove' pk=event.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+                {% endif %}
+            </div>
+        {% empty %}
+            <p>No scheduled events yet.</p>
+        {% endfor %}
+    </div>
+
+{% endblock  %}

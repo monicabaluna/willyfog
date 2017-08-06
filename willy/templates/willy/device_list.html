@@ -1,0 +1,27 @@
+{% extends 'willy/base.html' %}
+
+{% block content %}
+    <style>
+        #div1 {
+            white-space: nowrap; 
+            width: 5em; 
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+    {% for device in devices %}
+    <div class="w3-third w3-margin w3-border w3-hover-border-black">
+        <div class="w3-margin">
+            <h1><a href="{% url 'device_detail' pk=device.pk %}"> <div id="div1">{{ device.name }}</div></a></h1>
+            <a class="btn btn-default" href="{% url 'device_remove' pk=device.pk %}"><span class="glyphicon glyphicon-remove"></span></a>
+            <a class="btn btn-default" href="{% url 'device_edit' pk=device.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <p> <br> <i> Commands: {{ device.commands.count }}</i></p>
+            <a class="btn btn-default" href="{% url 'add_command_to_device' pk=device.pk %}">Add a new command</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="big-text">
+        You have no registered devices so far. <a href="{% url 'device_new' %}">Start now!</a>
+    </div>
+    {% endfor %}
+{% endblock %}

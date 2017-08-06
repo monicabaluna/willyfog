@@ -1,0 +1,23 @@
+{% extends 'willy/base.html' %}
+
+{% block content %}
+    <h1>Command settings</h1>
+    <form method="POST" class="device-form" id='learning_form'>
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+
+    <label for="sub"> Click <b>Save</b>, then bring your device close to the receiver and keep the button pushed as long as the LED is on.</label>
+
+    <button type="submit" form='learning_form' class="save btn btn-default" id="sub">Learn command</button>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    </script>
+{% endblock %}

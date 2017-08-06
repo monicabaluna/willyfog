@@ -1,0 +1,17 @@
+{% extends 'willy/base.html' %}
+
+{% block content %}
+    <h1>Choose a command to schedule for {{ device.name }}</h1>
+    <form method="POST" class="device-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Save</button>
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </form>
+{% endblock %}

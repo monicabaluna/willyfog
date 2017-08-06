@@ -1,0 +1,11 @@
+sudo apt-get install virtualenv
+virtualenv venv
+. venv/bin/activate
+pip install --upgrade pip
+pip install django~=1.10.0
+pip install apscheduler # for scheduling
+pip install pyserial # communication with arduino
+pip install django-datetime-widget
+python manage.py makemigrations willy
+python manage.py migrate willy
+python manage.py createsuperuser # create admin user
