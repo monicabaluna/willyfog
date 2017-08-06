@@ -64,18 +64,3 @@ We used the code example for NEC protocol from [here](https://blog.bschwind.com/
 Since signal sending has to be very exact (we need very well-timed delays), it cannot be done on the Cortex-A9 core (since timing is affected by the scheduler), so it must be done on the Arduino core (Cortex-M4). This way, sending is executed real-time. We implemented sending for the SONY protocol, using the example for NEC from [here](https://gist.github.com/EEVblog/6206934).
 
 When the user triggers a command (or a scheduled event is due), the web app just uploads an Arduino C++ script on the M4 core and that's it! The cores communicate via the serial interface.
-
-
-## The Development Flow
-At first, we wrote a web app in python, using BaseHTTPServer. We were using Javascript and ajax for the frontend.
-Later, when we got to the login / logout part, we discovered Basic HTTP was too.. basic. The Basic HTTP login procedure was not suitable for our project and the code became really crowded, so we switched to Django.
-
-We reimplemented most of the functionality, following the Django Girls tutorial. We also learned a bit of HTML, to make the layout prettier.
-
-Login and logout were really easy with Django. Next came IR reception, a stage that took us really long. The hardest part was finding a working IR library for UDOO Neo. The recommended libraries do not work on this board, since they are using "interrupts.h" - not available here. We finally found Neo GPIO, a GPIO library, together with an example written for the NEC infrared protocol. We followed the example to write our SONY receiver (since we had an available sony remote control).
-
-For sending, we found some NEC examples in the tutorials we had previously read for IR receiving. We quickly realised we have to work with Arduino, for real-time processing.
-
-After that came scheduling, that we easily implemented with APScheduler. We also tried Celery, but it was a bit too complicated for our home appliance app.
-
-All in all, it was a really fun experience. We got to work as a team and we also made a nicely working project. The main difficulties were finding GPIO libraries (and getting the receiver to work), making the web pages prettier and reflashing the board when it crashed (it has a weird bug and we had to reflash it a few times).
