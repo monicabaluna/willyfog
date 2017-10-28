@@ -54,13 +54,13 @@ Events that are scheduled to only run once are deleted from the database after t
 
 ##### The infrared code learner
 This modules uses [Neo.GPIO](https://github.com/smerkousdavid/Neo.GPIO), a python library originally written for Raspberry Pi. The library helps us manage UDOO GPIO, then we analyse the received frequencies to read the received codes.
-The user follows instructions received via the web app (e.g. keeps a button pressed untill the web app notifies him it's ready - at most around 5 seconds) untill the learner is done sampling. The learner is meant to receive multiple samples, untill it has enough information to decide the correct code.
+The user follows instructions received via the web app (e.g. keeps a button pressed until the web app notifies him it's ready - at most around 5 seconds) until the learner is done sampling. The learner is meant to receive multiple samples, until it has enough information to decide the correct code.
 
-We currently implemented learning (and sending) for the SONY infrared protocol. To extend the functionality, we will later decide the used protocol by analysing the IR signal's headers.
+We currently implemented learning (and sending) for the SONY, NEC and Epson infrared protocols. For the moment, the learner gets the protocol from the device's name. To extend the functionality, we will later decide the used protocol by analysing the IR signal's headers.
 
 We used the code example for NEC protocol from [here](https://blog.bschwind.com/2016/05/29/sending-infrared-commands-from-a-raspberry-pi-without-lirc/).
 
 ##### The infrared code sender
-Since signal sending has to be very exact (we need very well-timed delays), it cannot be done on the Cortex-A9 core (since timing is affected by the scheduler), so it must be done on the Arduino core (Cortex-M4). This way, sending is executed real-time. We implemented sending for the SONY protocol, using the example for NEC from [here](https://gist.github.com/EEVblog/6206934).
+Since signal sending has to be very exact (we need very well-timed delays), it cannot be done on the Cortex-A9 core (since timing is affected by the scheduler), so it must be done on the Arduino core (Cortex-M4). This way, sending is executed real-time. We used the example for NEC from [here](https://gist.github.com/EEVblog/6206934).
 
 When the user triggers a command (or a scheduled event is due), the web app just uploads an Arduino C++ script on the M4 core and that's it! The cores communicate via the serial interface.
